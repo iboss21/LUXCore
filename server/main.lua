@@ -32,3 +32,23 @@ function detectInventory()
     end
     return nil
 end
+
+local function VerifyResourceName()
+    local resourceName = GetCurrentResourceName()
+    if resourceName ~= "LUXCore" then
+        print("^1[LUXCore] ERROR: Resource folder has been renamed to '" .. resourceName .. "'. Shutting down...^0")
+        if Config.Logging.Discord.Enabled then
+            LUX.Logging.DiscordLog("Resource folder renamed to '" .. resourceName .. "'. Shutting down LUXCore.", "error")
+        end
+        StopResource(resourceName)
+        return false
+    end
+    return true
+end
+
+-- Call the verification function on resource start
+AddEventHandler('onResourceStart', function(resourceName)
+    if resourceName == GetCurrentResourceName() then
+        VerifyResourceName()
+    end
+end)

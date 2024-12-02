@@ -183,3 +183,43 @@ We welcome contributions to improve LUXCore! Follow these steps to get started:
 This project is licensed under the [MIT License](LICENSE).
 
 ---
+
+## 🔖 Tags
+
+[![fivem-framework](https://img.shields.io/badge/Tag-fivem--framework-blue)](https://github.com/topics/fivem-framework)
+[![fivem-core](https://img.shields.io/badge/Tag-fivem--core-blue)](https://github.com/topics/fivem-core)
+[![luxcore](https://img.shields.io/badge/Tag-luxcore-blue)](https://github.com/topics/luxcore)
+[![qbcore-integration](https://img.shields.io/badge/Tag-qbcore--integration-blue)](https://github.com/topics/qbcore-integration)
+[![esx-integration](https://img.shields.io/badge/Tag-esx--integration-blue)](https://github.com/topics/esx-integration)
+[![qbox-integration](https://img.shields.io/badge/Tag-qbox--integration-blue)](https://github.com/topics/qbox-integration)
+[![oxmysql-support](https://img.shields.io/badge/Tag-oxmysql--support-blue)](https://github.com/topics/oxmysql-support)
+[![mysql-async](https://img.shields.io/badge/Tag-mysql--async-blue)](https://github.com/topics/mysql-async)
+[![postgresql-support](https://img.shields.io/badge/Tag-postgresql--support-blue)](https://github.com/topics/postgresql-support)
+[![inventory-management](https://img.shields.io/badge/Tag-inventory--management-blue)](https://github.com/topics/inventory-management)
+[![ox_inventory](https://img.shields.io/badge/Tag-ox--inventory-blue)](https://github.com/topics/ox-inventory)
+[![tgiann-inventory](https://img.shields.io/badge/Tag-tgiann--inventory-blue)](https://github.com/topics/tgiann-inventory)
+[![qs-inventory](https://img.shields.io/badge/Tag-qs--inventory-blue)](https://github.com/topics/qs-inventory)
+[![player-events](https://img.shields.io/badge/Tag-player--events-blue)](https://github.com/topics/player-events)
+[![custom-events](https://img.shields.io/badge/Tag-custom--events-blue)](https://github.com/topics/custom-events)
+[![fivem-logging](https://img.shields.io/badge/Tag-fivem--logging-blue)](https://github.com/topics/fivem-logging)
+[![discord-integration](https://img.shields.io/badge/Tag-discord--integration-blue)](https://github.com/topics/discord-integration)
+[![fivem-database](https://img.shields.io/badge/Tag-fivem--database-blue)](https://github.com/topics/fivem-database)
+[![modular-framework](https://img.shields.io/badge/Tag-modular--framework-blue)](https://github.com/topics/modular-framework)
+[![advanced-config](https://img.shields.io/badge/Tag-advanced--config-blue)](https://github.com/topics/advanced-config)
+[![fivem-scripts](https://img.shields.io/badge/Tag-fivem--scripts-blue)](https://github.com/topics/fivem-scripts)
+[![developer-tools](https://img.shields.io/badge/Tag-developer--tools-blue)](https://github.com/topics/developer-tools)
+[![performance-monitoring](https://img.shields.io/badge/Tag-performance--monitoring-blue)](https://github.com/topics/performance-monitoring)
+[![slow-query-logging](https://img.shields.io/badge/Tag-slow--query--logging-blue)](https://github.com/topics/slow-query-logging)
+[![dynamic-detection](https://img.shields.io/badge/Tag-dynamic--detection-blue)](https://github.com/topics/dynamic-detection)
+[![auto-detection](https://img.shields.io/badge/Tag-auto--detection-blue)](https://github.com/topics/auto-detection)
+[![script-dependency](https://img.shields.io/badge/Tag-script--dependency-blue)](https://github.com/topics/script-dependency)
+[![resource-management](https://img.shields.io/badge/Tag-resource--management-blue)](https://github.com/topics/resource-management)
+[![fivepd-compatible](https://img.shields.io/badge/Tag-fivepd--compatible-blue)](https://github.com/topics/fivepd-compatible)
+[![fivem-roleplay](https://img.shields.io/badge/Tag-fivem--roleplay-blue)](https://github.com/topics/fivem-roleplay)
+[![advanced-systems](https://img.shields.io/badge/Tag-advanced--systems-blue)](https://github.com/topics/advanced-systems)
+[![fivem-performance](https://img.shields.io/badge/Tag-fivem--performance-blue)](https://github.com/topics/fivem-performance)
+[![multi-framework](https://img.shields.io/badge/Tag-multi--framework-blue)](https://github.com/topics/multi-framework)
+[![open-source](https://img.shields.io/badge/Tag-open--source-blue)](https://github.com/topics/open-source)
+[![fivem-development](https://img.shields.io/badge/Tag-fivem--development-blue)](https://github.com/topics/fivem-development)
+[![roleplay-systems](https://img.shields.io/badge/Tag-roleplay--systems-blue)](https://github.com/topics/roleplay-systems)
+

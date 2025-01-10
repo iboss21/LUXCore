@@ -1,111 +1,134 @@
+--[[ 
+    LUXCore - Main Initialization Script
+    Author: The Lux Empire - LUXCore Systems
+    Description: This script handles the initialization of the LUXCore framework, including framework, database, 
+    inventory detection, compatibility checks, and dynamic module loading. Built for scalability and extensibility.
+]]
+
 LUXCore = {}
 LUXCore.Players = {}
+LUXCore.Modules = {}
 
--- Framework, Database, Inventory Detection
+--[[ 
+    detectFramework()
+    Detects the active framework being used by the server.
+    Returns:
+        - Framework Name (string): 'QBCore', 'ESX', 'QBox', or nil if no framework is detected.
+        - Framework Object (table): Exported object for the detected framework, if available.
+]]
 function detectFramework()
-    if GetResourceState('qb-core') == 'started' then return 'QBCore'
-    elseif GetResourceState('es_extended') == 'started' then return 'ESX'
-    elseif GetResourceState('qbox-core') == 'started' then return 'QBox' end
-    return nil
+    if GetResourceState('qb-core') == 'started' then 
+        return 'QBCore', exports['qb-core']
+    elseif GetResourceState('es_extended') == 'started' then 
+        return 'ESX', exports['es_extended']
+    elseif GetResourceState('qbox-core') == 'started' then 
+        return 'QBox', exports['qbox-core']
+    end
+    return nil, nil
 end
 
+--[[ 
+    detectDatabase()
+    Detects the active database system being used by the server.
+    Returns:
+        - Database Name (string): 'oxmysql', 'postgresql', or nil if no database is detected.
+        - Database Object (table): Exported object for the detected database, if available.
+]]
 function detectDatabase()
-    if GetResourceState('oxmysql') == 'started' then return 'oxmysql'
-    elseif Config.Database.PostgreSQL.Enabled then return 'postgresql' end
-    return nil
+    if GetResourceState('oxmysql') == 'started' then 
+        return 'oxmysql', exports.oxmysql
+    elseif Config.Database.PostgreSQL.Enabled then 
+        return 'postgresql', nil
+    end
+    return nil, nil
 end
 
+--[[ 
+    detectInventory()
+    Detects the active inventory system being used by the server.
+    Returns:
+        - Inventory Name (string): Name of the detected inventory system or nil if no system is detected.
+]]
 function detectInventory()
     for _, inv in ipairs(Config.Modules.Inventory.SupportedInventories) do
-        if GetResourceState(inv) == 'started' then return inv end
+        if GetResourceState(inv) == 'started' then 
+            return inv 
+        end
     end
     return nil
 end
 
--- Initialize LUXCore
+--[[ 
+    checkVersionCompatibility()
+    Performs compatibility checks to ensure detected frameworks and databases are properly initialized.
+    Logs errors if any critical systems are missing or not started.
+]]
+function checkVersionCompatibility()
+    if LUXCore.Framework == 'QBCore' and GetResourceState('qb-core') ~= 'started' then
+        print("^1[Compatibility] Error: QBCore is not properly initialized.^0")
+    end
+    if LUXCore.Database == 'oxmysql' and GetResourceState('oxmysql') ~= 'started' then
+        print("^1[Compatibility] Error: oxmysql is not running.^0")
+    end
+end
+
+--[[ 
+    LUXCore.LoadModules()
+    Dynamically loads all core modules for LUXCore. Each module is expected to follow a specific structure for 
+    seamless integration.
+]]
+function LUXCore.LoadModules()
+    local modules = {
+        "server/events.lua",
+        "server/functions.lua",
+        "server/inventory.lua",
+        "server/performance.lua",
+        "server/devtools.lua",
+        "server/loader.lua"
+    }
+
+    for _, module in ipairs(modules) do
+        local success, err = pcall(function() dofile(module) end)
+        if success then
+            print("^2[LUXCore] Module Loaded: ^0" .. module)
+        else
+            print("^1[LUXCore] Failed to Load Module: ^0" .. module .. " - " .. err)
+        end
+    end
+end
+
+--[[ 
+    LUXCore.Initialize()
+    Entry point for initializing the LUXCore framework. Handles framework, database, inventory detection, and 
+    performs validation and module loading.
+]]
 function LUXCore.Initialize()
-    -- Detect Framework
-    LUXCore.Framework = detectFramework()
-    LUXCore.Database = detectDatabase()
+    -- Detect Framework, Database, and Inventory
+    LUXCore.Framework, LUXCore.FrameworkObject = detectFramework()
+    LUXCore.Database, LUXCore.DatabaseObject = detectDatabase()
     LUXCore.Inventory = detectInventory()
 
     -- Debug Logging
     if Config.Debug then
-        LUX.Functions.Log(string.format("Detected Framework: %s", LUXCore.Framework or "None"), "info", "Initialization")
-        LUX.Functions.Log(string.format("Detected Database: %s", LUXCore.Database or "None"), "info", "Initialization")
-        LUX.Functions.Log(string.format("Detected Inventory: %s", LUXCore.Inventory or "None"), "info", "Initialization")
+        print(string.format("[LUXCore] Detected Framework: %s", LUXCore.Framework or "None"))
+        print(string.format("[LUXCore] Detected Database: %s", LUXCore.Database or "None"))
+        print(string.format("[LUXCore] Detected Inventory: %s", LUXCore.Inventory or "None"))
     end
 
-    -- Verify Resource Name
-    if not VerifyResourceName() then
+    -- Perform Version Compatibility Check
+    checkVersionCompatibility()
+
+    -- Validate Configuration
+    if not Config.Validate() then
+        print("^1[LUXCore] Initialization aborted due to configuration errors.^0")
         return
     end
 
-    -- Framework-Specific Initialization
-    LUXCore.InitializeFramework()
+    -- Load Core Modules
+    LUXCore.LoadModules()
+
+    print("^2[LUXCore] Initialization completed successfully.^0")
 end
 
--- Framework-Specific Initialization
-function LUXCore.InitializeFramework()
-    if LUXCore.Framework == 'QBCore' then
-        LUX.Functions.Log("Initializing QBCore-specific features.", "info", "Initialization")
-        -- Add QBCore-specific initialization logic here
-    elseif LUXCore.Framework == 'ESX' then
-        LUX.Functions.Log("Initializing ESX-specific features.", "info", "Initialization")
-        -- Add ESX-specific initialization logic here
-    elseif LUXCore.Framework == 'QBox' then
-        LUX.Functions.Log("Initializing QBox-specific features.", "info", "Initialization")
-        -- Add QBox-specific initialization logic here
-    else
-        LUX.Functions.Log("No framework detected. Initialization skipped.", "warning", "Initialization")
-    end
-end
-
--- Verify Resource Name
-local function VerifyResourceName()
-    local resourceName = GetCurrentResourceName()
-    if resourceName ~= "LUXCore" then
-        LUX.Functions.Log("Resource folder has been renamed to '" .. resourceName .. "'. Shutting down...", "error", "Initialization")
-        if Config.Logging.Discord.Enabled then
-            LUX.Logging.DiscordLog("Resource folder renamed to '" .. resourceName .. "'. Shutting down LUXCore.", "error")
-        end
-        StopResource(resourceName)
-        return false
-    end
-    return true
-end
-
--- Resource Event Handling
-AddEventHandler('onResourceStart', function(resourceName)
-    if resourceName == GetCurrentResourceName() then
-        LUXCore.Initialize()
-    end
-end)
-
-AddEventHandler('onResourceStop', function(resourceName)
-    if resourceName == GetCurrentResourceName() then
-        LUX.Functions.Log("LUXCore resource stopped.", "info", "Resource")
-    end
-end)
-
--- Reload Command (For Development)
-RegisterCommand('luxcore:reload', function(source)
-    if source ~= 0 then
-        return -- Allow only console to reload
-    end
-
-    LUXCore.Initialize()
-    LUX.Functions.Log("LUXCore reloaded successfully.", "info", "Reload")
-end, false)
-
--- Debug Command
-RegisterCommand('luxcore:debug', function(source, args)
-    if source ~= 0 then
-        return -- Allow only console to debug
-    end
-
-    LUX.Functions.Log("LUXCore Debug Information:", "info", "Debug")
-    LUX.Functions.Log("Framework: " .. (LUXCore.Framework or "None"), "info", "Debug")
-    LUX.Functions.Log("Database: " .. (LUXCore.Database or "None"), "info", "Debug")
-    LUX.Functions.Log("Inventory: " .. (LUXCore.Inventory or "None"), "info", "Debug")
-end, false)
+-- Auto-Start Initialization
+LUXCore.Initialize()

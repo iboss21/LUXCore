@@ -1,136 +1,172 @@
+--[[ 
+    Configuration File for LUXCore
+    Author: The Lux Empire - LUXCore Systems
+    Description: This file contains all configurable options for the LUXCore framework. 
+                 Each setting is structured to provide scalability, extensibility, and clarity.
+                 Ensure to modify these values according to your server's requirements.
+]]
+
 Config = {}
 
--- General Settings
-Config.Debug = true -- Enable/Disable Debug Mode
-Config.Locale = 'en' -- Default Locale for Translations
-Config.BannerColor = '#FF4500' -- Hex Color for Banners
-Config.ServerLogo = 'https://example.com/logo.png' -- URL to Server Logo
+--[[ 
+    General Settings
+    Description: These are the core settings for the framework, including debug options, localization, 
+                 server branding, and maintenance mode toggles.
+]]
+Config.Debug = true -- Enable/Disable Debug Mode (true = show detailed logs)
+Config.Locale = 'en' -- Default Locale for Translations (e.g., 'en', 'fr', 'de')
+Config.BannerColor = '#FF4500' -- Hexadecimal Color Code for Banners in Logs/Notifications
+Config.ServerLogo = 'https://example.com/logo.png' -- URL to the Server Logo for Branding
 Config.Version = '1.0.0' -- Framework/Server Version
-Config.MaintenanceMode = false -- Enable Maintenance Mode for Updates
+Config.MaintenanceMode = false -- Enable Maintenance Mode (true = only admins can connect)
 
--- Framework Detection
+--[[ 
+    Framework Detection
+    Description: Automatically detects and integrates with a preferred framework (e.g., QBCore, ESX, QBox).
+                 If AutoDetect is true, it will detect and load the active framework dynamically.
+]]
 Config.FrameworkDetection = {
-    AutoDetect = true, -- Auto Detect Framework
-    PreferredFramework = nil -- Set Preferred Framework ('QBCore', 'ESX', 'QBox') or nil for Auto-Detect
+    AutoDetect = true, -- Automatically Detect Active Framework
+    PreferredFramework = nil -- Set Preferred Framework ('QBCore', 'ESX', 'QBox') or leave nil for Auto-Detect
 }
 
--- Database Settings
+--[[ 
+    Database Configuration
+    Description: Handles the settings for database systems used in the server. Supports multiple backends like 
+                 oxmysql, PostgreSQL, and SQLite.
+]]
 Config.Database = {
-    UseOxmysql = true, -- Prefer oxmysql for Database
-    Debug = false, -- Enable Debugging for Database Queries
-    SlowQueryWarning = 500, -- Log Queries Taking Longer Than This (ms)
-    PoolSize = 5, -- Database Connection Pool Size
-    FallbackToSQLite = true, -- Use SQLite if Other Databases Are Not Available
+    UseOxmysql = true, -- Use oxmysql for Database Operations
+    Debug = false, -- Enable Debug Mode for Database Queries
+    SlowQueryWarning = 500, -- Log Queries Taking Longer Than This (in ms)
+    PoolSize = 5, -- Maximum Number of Connections in the Database Pool
+    FallbackToSQLite = true, -- Automatically Use SQLite if No Other Database is Enabled
     PostgreSQL = {
-        Enabled = false, -- Enable PostgreSQL
+        Enabled = false, -- Enable PostgreSQL Support
         ConnectionString = "postgres://user:password@localhost:5432/database" -- PostgreSQL Connection String
     },
     SQLite = {
-        Path = "database.sqlite", -- SQLite Database File Path
+        Path = "database.sqlite" -- File Path for SQLite Database
     }
 }
 
--- Logging Settings
+--[[ 
+    Logging Configuration
+    Description: Controls logging options, including logging to Discord, files, and external APIs.
+                 Use this to track server events, errors, and debugging information.
+]]
 Config.Logging = {
-    Enabled = true, -- Enable Logging
+    Enabled = true, -- Enable Logging System
     Levels = { 'info', 'warning', 'error', 'debug' }, -- Allowed Log Levels
     Discord = {
-        Enabled = true, -- Log to Discord Webhook
-        WebhookURL = "https://discord.com/api/webhooks/example", -- Webhook URL
-        RoleBasedAccess = true, -- Role-Based Logging on Discord
-        Throttle = 60 -- Minimum Interval (Seconds) Between Logs to Discord
+        Enabled = true, -- Enable Logging to Discord Webhook
+        WebhookURL = "https://discord.com/api/webhooks/example", -- Discord Webhook URL
+        RoleBasedAccess = true, -- Restrict Logging Visibility Based on Discord Roles
+        Throttle = 60 -- Minimum Interval Between Logs Sent to Discord (in seconds)
     },
     FileManager = {
-        Enabled = true, -- Save Logs to Files
+        Enabled = true, -- Enable File-Based Logging
         Path = "logs/", -- Directory for Log Files
-        MaxFileSizeMB = 10, -- Max File Size Before Rolling Over
-        RetentionDays = 30 -- Days to Retain Old Logs
+        MaxFileSizeMB = 10, -- Maximum Size for Log Files Before Creating a New One (in MB)
+        RetentionDays = 30 -- Number of Days to Retain Old Log Files
     },
     API = {
-        Enabled = true, -- Log to External API
-        Endpoint = "https://example.com/api/logs", -- API Endpoint
-        APIKey = "your-api-key" -- API Authentication Key
+        Enabled = true, -- Enable Logging to External API
+        Endpoint = "https://example.com/api/logs", -- External API Endpoint for Logs
+        APIKey = "your-api-key" -- API Key for Authentication
     }
 }
 
--- Server Maintenance
-Config.Maintenance = {
-    Enabled = false, -- Maintenance Mode Toggle
-    KickMessage = "Server is under maintenance. Please try again later." -- Message for Players During Maintenance
+--[[ 
+    Security Settings
+    Description: Protects the server against malicious users. Includes anti-cheat, IP whitelisting, 
+                 VPN detection, and configurable auto-ban policies.
+]]
+Config.Security = {
+    AntiCheatEnabled = true, -- Enable Built-In Anti-Cheat Mechanisms
+    MaxLoginAttempts = 5, -- Maximum Number of Login Attempts Before Blocking
+    IPWhitelist = { '127.0.0.1', '192.168.1.1' }, -- IP Addresses Allowed to Bypass Restrictions
+    VPNDetection = true, -- Detect and Restrict VPN Connections
+    AutoBanThreshold = 3, -- Number of Violations Before Automatically Banning a User
+    PasswordPolicy = { -- Password Rules for User Accounts
+        MinLength = 8, -- Minimum Password Length
+        RequireSpecialChar = true, -- Require Special Characters (!, @, #, etc.)
+        RequireNumber = true -- Require At Least One Number
+    },
+    TwoFactorAuthentication = true -- Enable Two-Factor Authentication for Admins
 }
 
--- Feature Toggles
-Config.Features = {
-    UseWeatherSync = true, -- Enable Weather Synchronization
-    UseRealTime = false, -- Use Real-World Time on the Server
-    EnableVoiceProximity = true -- Enable Proximity-Based Voice Chat
+--[[ 
+    Feature Toggles
+    Description: Dynamically enable or disable server features to match your roleplay environment. 
+                 This system allows easy control of major functionalities like weather sync, economy, and voice chat.
+]]
+Config.FeatureFlags = {
+    WeatherSync = true, -- Enable Weather Synchronization with External API
+    RealTimeClock = false, -- Use Real-World Time on the Server
+    VoiceChatProximity = true, -- Enable Proximity-Based Voice Chat
+    AdvancedEconomy = true -- Enable Advanced Economy Features
 }
 
--- Module Configuration
+--[[ 
+    Performance Monitoring
+    Description: Tracks server resource usage, garbage collection intervals, and optimizes performance 
+                 by preventing bottlenecks.
+]]
+Config.Performance = {
+    EnableResourceMonitor = true, -- Enable Real-Time Resource Monitoring
+    AutoOptimize = true, -- Automatically Optimize Server Resources
+    GarbageCollectorInterval = 60000, -- Interval for Running Garbage Collection (in ms)
+    ResourceWarningThreshold = 5.0, -- Log Warning if Resource Time Exceeds This Value (in ms)
+    SlowQueryThreshold = 1000 -- Log Database Queries Taking Longer Than This Time (in ms)
+}
+
+--[[ 
+    Module Configuration
+    Description: Auto-detect and load supported modules for inventory, appearance, and economy systems. 
+                 Allows easy integration with third-party systems.
+]]
 Config.Modules = {
     Inventory = {
-        AutoDetect = true, -- Auto-Detect Inventory System
-        SupportedInventories = { -- Supported Inventory Systems
+        AutoDetect = true, -- Automatically Detect Active Inventory System
+        SupportedInventories = { -- List of Supported Inventory Systems
             'tgiann-inventory', 'ox_inventory', 'qs-inventory', 'ps-inventory', 'disc-inventory'
         }
     },
     Appearance = {
-        AutoDetect = true, -- Auto-Detect Appearance System
-        SupportedSystems = { -- Supported Appearance Systems
+        AutoDetect = true, -- Automatically Detect Active Appearance System
+        SupportedSystems = { -- List of Supported Appearance Systems
             'illenium-appearance', 'qb-clothing', 'fivem-appearance'
         }
     },
     Economy = {
-        CurrencySymbol = '$', -- In-Game Currency Symbol
-        InflationRate = 1.02, -- Adjusts Economy for Roleplay (1.00 = No Change)
-        TaxRates = { -- Taxes for Various Activities
-            Income = 0.15, -- Income Tax (15%)
-            Sales = 0.08 -- Sales Tax (8%)
+        CurrencySymbol = '$', -- Symbol Used for In-Game Currency
+        InflationRate = 1.02, -- Inflation Rate Applied to Prices (1.00 = No Change)
+        TaxRates = { -- Tax Rates for Economy Activities
+            Income = 0.15, -- Income Tax Rate (15%)
+            Sales = 0.08 -- Sales Tax Rate (8%)
         }
     }
 }
 
--- Event System
-Config.Events = {
-    AutoCleanup = true, -- Automatically Cleanup Unused Objects
-    EventLogLevel = 'info', -- Log Level for Event Notifications
-    MaxConcurrentEvents = 10 -- Max Simultaneous Events
-}
-
--- Notification System
-Config.Notifications = {
-    DefaultDuration = 5000, -- Default Notification Display Time (ms)
-    UseCustomStyles = true, -- Enable Custom Notification Styles
-    BannerURL = "https://example.com/banner.png" -- URL for Notification Banner
-}
-
--- Security Settings
-Config.Security = {
-    AntiCheatEnabled = true, -- Enable Anti-Cheat System
-    MaxLoginAttempts = 5, -- Maximum Allowed Login Attempts
-    IPWhitelist = { '127.0.0.1', '192.168.1.1' }, -- Whitelisted IPs
-    VPNDetection = true, -- Detect and Restrict VPN Connections
-    AutoBanThreshold = 3 -- Number of Violations Before Automatic Ban
-}
-
--- Debugging and Developer Tools
-Config.DevTools = {
-    EnableConsole = true, -- Enable In-Game Console for Debugging
-    ShowFPS = true, -- Display FPS Counter for Developers
-    DebugLogsToFile = true -- Save Debug Logs to File
-}
-
--- UI Configuration
-Config.UI = {
-    Theme = 'dark', -- Default Theme (light/dark)
-    WelcomeMessage = "Welcome to Our Server! Enjoy Your Stay.", -- Custom Welcome Message
-    EnableHUD = true, -- Enable Heads-Up Display
-    CustomHUDPath = "hud/custom_hud.html" -- Path to Custom HUD
-}
-
--- Additional Enhancements
-Config.Performance = {
-    EnableResourceMonitor = true, -- Enable Real-Time Resource Monitoring
-    AutoOptimize = true, -- Automatically Optimize Server Resources
-    GarbageCollectorInterval = 60000 -- Interval (ms) for Garbage Collection
-}
+--[[ 
+    Configuration Validation
+    Description: Validates critical settings to ensure the server starts without errors. Logs warnings if 
+                 any required configuration is missing or misconfigured.
+]]
+Config.Validate = function()
+    if not Config.Locale or Config.Locale == '' then
+        print("^1[Config] Error: Locale is not defined.^0")
+        return false
+    end
+    if not Config.Version or Config.Version == '' then
+        print("^1[Config] Error: Version is not defined.^0")
+        return false
+    end
+    if not Config.Database.UseOxmysql and not Config.Database.PostgreSQL.Enabled then
+        print("^1[Config] Error: No database system is enabled.^0")
+        return false
+    end
+    print("^2[Config] Validation Passed.^0")
+    return true
+end

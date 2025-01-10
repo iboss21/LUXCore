@@ -1,18 +1,7 @@
 LUXCore = {}
 LUXCore.Players = {}
 
--- Initialize LUXCore
-CreateThread(function()
-    LUXCore.Framework = detectFramework()
-    LUXCore.Database = detectDatabase()
-    LUXCore.Inventory = detectInventory()
-    if Config.Debug then
-        print(string.format("[LUXCore] Detected Framework: %s", LUXCore.Framework or "None"))
-        print(string.format("[LUXCore] Detected Database: %s", LUXCore.Database or "None"))
-        print(string.format("[LUXCore] Detected Inventory: %s", LUXCore.Inventory or "None"))
-    end
-end)
-
+-- Framework, Database, Inventory Detection
 function detectFramework()
     if GetResourceState('qb-core') == 'started' then return 'QBCore'
     elseif GetResourceState('es_extended') == 'started' then return 'ESX'
@@ -33,10 +22,50 @@ function detectInventory()
     return nil
 end
 
+-- Initialize LUXCore
+function LUXCore.Initialize()
+    -- Detect Framework
+    LUXCore.Framework = detectFramework()
+    LUXCore.Database = detectDatabase()
+    LUXCore.Inventory = detectInventory()
+
+    -- Debug Logging
+    if Config.Debug then
+        LUX.Functions.Log(string.format("Detected Framework: %s", LUXCore.Framework or "None"), "info", "Initialization")
+        LUX.Functions.Log(string.format("Detected Database: %s", LUXCore.Database or "None"), "info", "Initialization")
+        LUX.Functions.Log(string.format("Detected Inventory: %s", LUXCore.Inventory or "None"), "info", "Initialization")
+    end
+
+    -- Verify Resource Name
+    if not VerifyResourceName() then
+        return
+    end
+
+    -- Framework-Specific Initialization
+    LUXCore.InitializeFramework()
+end
+
+-- Framework-Specific Initialization
+function LUXCore.InitializeFramework()
+    if LUXCore.Framework == 'QBCore' then
+        LUX.Functions.Log("Initializing QBCore-specific features.", "info", "Initialization")
+        -- Add QBCore-specific initialization logic here
+    elseif LUXCore.Framework == 'ESX' then
+        LUX.Functions.Log("Initializing ESX-specific features.", "info", "Initialization")
+        -- Add ESX-specific initialization logic here
+    elseif LUXCore.Framework == 'QBox' then
+        LUX.Functions.Log("Initializing QBox-specific features.", "info", "Initialization")
+        -- Add QBox-specific initialization logic here
+    else
+        LUX.Functions.Log("No framework detected. Initialization skipped.", "warning", "Initialization")
+    end
+end
+
+-- Verify Resource Name
 local function VerifyResourceName()
     local resourceName = GetCurrentResourceName()
     if resourceName ~= "LUXCore" then
-        print("^1[LUXCore] ERROR: Resource folder has been renamed to '" .. resourceName .. "'. Shutting down...^0")
+        LUX.Functions.Log("Resource folder has been renamed to '" .. resourceName .. "'. Shutting down...", "error", "Initialization")
         if Config.Logging.Discord.Enabled then
             LUX.Logging.DiscordLog("Resource folder renamed to '" .. resourceName .. "'. Shutting down LUXCore.", "error")
         end
@@ -46,9 +75,37 @@ local function VerifyResourceName()
     return true
 end
 
--- Call the verification function on resource start
+-- Resource Event Handling
 AddEventHandler('onResourceStart', function(resourceName)
     if resourceName == GetCurrentResourceName() then
-        VerifyResourceName()
+        LUXCore.Initialize()
     end
 end)
+
+AddEventHandler('onResourceStop', function(resourceName)
+    if resourceName == GetCurrentResourceName() then
+        LUX.Functions.Log("LUXCore resource stopped.", "info", "Resource")
+    end
+end)
+
+-- Reload Command (For Development)
+RegisterCommand('luxcore:reload', function(source)
+    if source ~= 0 then
+        return -- Allow only console to reload
+    end
+
+    LUXCore.Initialize()
+    LUX.Functions.Log("LUXCore reloaded successfully.", "info", "Reload")
+end, false)
+
+-- Debug Command
+RegisterCommand('luxcore:debug', function(source, args)
+    if source ~= 0 then
+        return -- Allow only console to debug
+    end
+
+    LUX.Functions.Log("LUXCore Debug Information:", "info", "Debug")
+    LUX.Functions.Log("Framework: " .. (LUXCore.Framework or "None"), "info", "Debug")
+    LUX.Functions.Log("Database: " .. (LUXCore.Database or "None"), "info", "Debug")
+    LUX.Functions.Log("Inventory: " .. (LUXCore.Inventory or "None"), "info", "Debug")
+end, false)

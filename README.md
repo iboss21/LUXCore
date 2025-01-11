@@ -37,7 +37,7 @@
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/YourUsername/LUXCore.git
+   git clone https://github.com/iboss21/LUXCore.git
    ```
 
 2. **Place LUXCore in your Resources Folder**:

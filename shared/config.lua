@@ -1,3 +1,65 @@
+
+-- LUXCore - Configuration File
+-- Centralized configuration for all components: server, client, dashboard, and logs.
+-- This file ensures modularity and extensive customization.
+
+Config = {}
+
+-- General Settings
+Config.General = {
+    Framework = 'auto',             -- Framework to use: 'ESX', 'QBCore', or 'auto' for auto-detection.
+    DebugMode = true,               -- Enable/disable debug messages (true/false).
+    LogToFile = true,               -- Enable/disable logging to file (true/false).
+    LogFilePath = 'logs/luxcore.log', -- Path to the log file.
+    AutoSaveInterval = 600,         -- Interval in seconds for auto-saving data.
+    SessionTimeout = 1800,          -- Time in seconds before inactive players are disconnected.
+    MaintenanceMode = false,        -- Enable/disable maintenance mode (true/false).
+    MaintenanceMessage = 'The server is under maintenance. Please try again later.' -- Maintenance message for players.
+}
+
+-- Version Control
+Config.Version = {
+    CurrentVersion = '3.0.0',       -- Current version of LUXCore.
+    AutoUpdateCheck = true,         -- Automatically check for updates (true/false).
+    UpdateCheckInterval = 3600,     -- Interval in seconds for update checks.
+    NotifyOnNewVersion = true,      -- Notify admins if a new version is available (true/false).
+}
+
+-- UI Settings
+Config.UI = {
+    EnableAdvancedHUD = true,       -- Enable/disable advanced HUD features (true/false).
+    HUDOpacity = 0.85,              -- Opacity level for HUD elements (0.0 to 1.0).
+    ThemeColor = '#FF5733',         -- Default theme color for UI elements.
+    MinimapEnabled = true,          -- Enable/disable the minimap (true/false).
+    ShowHealthBars = true,          -- Display health and armor bars (true/false).
+    CrosshairEnabled = false        -- Enable/disable a custom crosshair (true/false).
+}
+
+-- Logging Settings
+Config.Logging = {
+    EnableDiscordLogs = true,       -- Send critical logs to Discord (true/false).
+    DiscordWebhookURL = '',         -- Discord webhook URL for logs.
+    LogRotation = true,             -- Enable log file rotation (true/false).
+    MaxLogFileSize = 10 * 1024,     -- Maximum log file size in kilobytes before rotation.
+}
+
+-- Economy Settings
+Config.Economy = {
+    EnableTaxes = true,             -- Enable/disable taxation (true/false).
+    TaxRate = 0.1,                  -- Tax rate applied to transactions (0.0 to 1.0).
+    EnableBanking = true,           -- Enable/disable banking system (true/false).
+    MaxBankBalance = 1000000        -- Maximum allowable bank balance.
+}
+
+-- Combat Settings
+Config.Combat = {
+    EnableHeadshots = true,         -- Enable/disable headshot multipliers (true/false).
+    HeadshotMultiplier = 2.5,       -- Damage multiplier for headshots.
+    EnableArmorDecay = true,        -- Enable/disable armor decay over time (true/false).
+    ReviveTime = 60                 -- Time in seconds to revive a player.
+}
+
+-- Original Content Preserved
 --[[ 
     Configuration File for LUXCore
     Author: The Lux Empire - LUXCore Systems

@@ -3,7 +3,7 @@
 -- Centralized configuration for all components: server, client, dashboard, and logs.
 -- This file ensures modularity and extensive customization.
 
-Config = {}
+--Config = {}
 
 -- General Settings
 Config.General = {
